@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>NORA — Assistant IA Conversationnel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- PWA Web App Manifest -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Apple iOS & iPhone Safari Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NORA" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon-180x180.png" />
+  <link rel="apple-touch-icon" sizes="167x167" href="./icons/apple-touch-icon-167x167.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="./icons/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="./icons/apple-touch-icon-120x120.png" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/my-ai/assets/nora-logo-D9G98i51.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png" />
+  <link rel="shortcut icon" href="./favicon.svg" />
+  <script type="module" crossorigin src="/my-ai/assets/main-DYnz9oc6.js"></script>
+  <link rel="modulepreload" crossorigin href="/my-ai/assets/authService-DRXeii7W.js">
+  <link rel="stylesheet" crossorigin href="/my-ai/assets/authService-Bvw3yU-f.css">
+</head>
+<body>
+  <div class="nora-app" id="noraApp">
+    
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <!-- Hamburger Menu Button -->
+        <button id="btnOpenSidebar" class="btn-icon" aria-label="Menu" title="Discussions récentes et compte">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="header-center" id="headerCenter">
+        <!-- The miniature glowing orb / SVG logo moves here when in conversation -->
+        <div class="brand-title" id="headerBrandTitle">
+          <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%20width='512'%20height='512'%3e%3crect%20width='512'%20height='512'%20rx='112'%20fill='%23000000'/%3e%3cpath%20d='M150%20380V132H200L312%20290V132H362V380H312L200%20222V380Z'%20fill='%23FFFFFF'/%3e%3c/svg%3e" alt="NORA Logo" class="brand-app-logo" />
+          <span class="brand-name">NORA</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Accès direct création de compte / connexion -->
+        <a href="./signup.html" class="header-auth-badge" id="btnHeaderAuth" title="Créer un compte ou se connecter">
+          <i class="fa-solid fa-user-circle"></i>
+          <span class="auth-label-text" id="headerAuthLabel">Connexion</span>
+        </a>
+        <button id="btnApiKey" class="btn-api-badge clean-header-btn" aria-label="Paramètres" title="Paramètres et configuration">
+          <span class="status-dot" id="apiStatusDot"></span>
+          <i class="fa-solid fa-sliders" style="font-size: 13px;"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Stream Area -->
+    <main class="main-content" id="mainContent">
+      <div class="content-container">
+
+        <!-- Welcome Hero View (Displayed before first message) -->
+        <section class="hero-view" id="heroView">
+          <div class="hero-orb-wrapper" id="heroOrbWrapper">
+            <div class="nora-orb" id="noraOrb" role="button" aria-label="Orbe NORA AI" title="NORA AI Core"></div>
+          </div>
+          <h1 class="hero-title" id="heroTitle">
+            Que recherchez-vous aujourd'hui ?
+          </h1>
+          
+          <!-- Suggestion Chips -->
+          <div class="suggestions-grid" id="suggestionsGrid">
+            <button class="chip-item" data-query="female photographer for my wedding in S.F">
+              female photographer for my wedding in S.F
+            </button>
+            <button class="chip-item" data-query="cheap photographer under US$30">
+              cheap photographer under US$30
+            </button>
+            <button class="chip-item" data-query="Idées créatives pour un mariage intimiste">
+              Idées créatives pour un mariage intimiste
+            </button>
+            <button class="chip-item" data-query="Rédige-moi un vœu de mariage poétique et touchant">
+              Rédige-moi un vœu de mariage poétique et touchant
+            </button>
+          </div>
+        </section>
+
+        <!-- Conversation Stream (Multi-turn chat messages) -->
+        <section class="chat-stream" id="chatStream" style="display: none;">
+          <!-- Dynamically appended messages -->
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Floating Bottom Search & Prompt Bar -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        
+        <!-- Popover Menu Outils & Création (au clic sur le bouton +) -->
+        <div class="input-actions-popover" id="inputActionsPopover" style="display: none;">
+          <div class="popover-action-header">
+            <span class="action-header-title">Outils & Créations</span>
+            <span class="action-header-badge"><i class="fa-solid fa-bolt" style="font-size: 10px; margin-right: 3px;"></i> Ultra-rapide</span>
+          </div>
+          <div class="popover-action-list">
+            <button type="button" class="input-action-item" id="actCreateImage">
+              <div class="action-item-icon img-icon">
+                <i class="fa-solid fa-image"></i>
+              </div>
+              <div class="action-item-text">
+                <div class="item-title">Créer des images</div>
+                <div class="item-desc">Illustrations artistiques et visuels HD instantanés</div>
+              </div>
+            </button>
+            <button type="button" class="input-action-item" id="actCreateCode">
+              <div class="action-item-icon code-icon">
+                <i class="fa-solid fa-code"></i>
+              </div>
+              <div class="action-item-text">
+                <div class="item-title">Créer des codes</div>
+                <div class="item-desc">Scripts, fonctions, algorithmes & composants</div>
+              </div>
+            </button>
+            <button type="button" class="input-action-item" id="actRecommendations">
+              <div class="action-item-icon sparkle-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <div class="action-item-text">
+                <div class="item-title">Recommandations</div>
+                <div class="item-desc">Photographes, prestataires & inspirations</div>
+              </div>
+            </button>
+            <button type="button" class="input-action-item" id="actAttachFile">
+              <div class="action-item-icon attach-icon">
+                <i class="fa-solid fa-paperclip"></i>
+              </div>
+              <div class="action-item-text">
+                <div class="item-title">Joindre un document</div>
+                <div class="item-desc">Analyser un fichier texte, code ou markdown</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <form class="search-box-card clean-box" id="searchForm">
+          <!-- Bouton + pour choisir : Créer des images, Créer des codes... -->
+          <button type="button" class="btn-input-plus" id="btnInputPlus" aria-label="Outils et création" title="Créer des images, codes, recommandations...">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+
+          <!-- Badge Mode Actif (ex: Mode Image ou Mode Code) -->
+          <div class="active-mode-tag" id="activeModeTag" style="display: none;">
+            <i class="fa-solid fa-image" id="activeModeIcon"></i>
+            <span id="activeModeText">Image</span>
+            <button type="button" id="btnRemoveActiveMode" class="btn-remove-mode" aria-label="Annuler le mode" title="Annuler le mode">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="input-line">
+            <textarea
+              id="promptInput"
+              rows="1"
+              placeholder="Start searching..."
+              aria-label="Message à NORA"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn-send" id="btnSend" aria-label="Envoyer">
+            <i class="fa-solid fa-arrow-up"></i>
+          </button>
+        </form>
+
+        <!-- Hidden input for file attachment -->
+        <input type="file" id="hiddenFileInput" style="display: none;" accept=".txt,.js,.json,.html,.css,.py,.md,.csv,.ts,.jsx,.tsx" />
+      </div>
+    </footer>
+
+    <!-- Sidebar Drawer (Discussions Récentes & Compte) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar-drawer" id="sidebarDrawer" aria-label="Menu latéral">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%20width='512'%20height='512'%3e%3crect%20width='512'%20height='512'%20rx='112'%20fill='%23000000'/%3e%3cpath%20d='M150%20380V132H200L312%20290V132H362V380H312L200%20222V380Z'%20fill='%23FFFFFF'/%3e%3c/svg%3e" alt="NORA Logo" class="sidebar-app-logo" />
+          <span class="title">NORA</span>
+        </div>
+        <!-- Actions d'en-tête : Recherche et Retrait de fenêtre (fermeture) -->
+        <div class="sidebar-header-actions">
+          <button id="btnToggleSearchDiscussions" class="btn-sidebar-header-action" aria-label="Rechercher une discussion" title="Rechercher une discussion">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button id="btnCloseSidebar" class="btn-sidebar-header-action" aria-label="Masquer la barre latérale" title="Masquer la barre latérale">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-collapse-svg">
+              <rect x="3" y="4" width="18" height="16" rx="4"></rect>
+              <line x1="9" y1="4" x2="9" y2="20"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barre de recherche des discussions (masquée/affichée au clic sur la loupe) -->
+      <div class="sidebar-search-container" id="sidebarSearchContainer" style="display: none;">
+        <i class="fa-solid fa-magnifying-glass search-inner-icon"></i>
+        <input type="text" id="inputSearchDiscussions" placeholder="Rechercher des discussions..." autocomplete="off" />
+        <button type="button" id="btnClearSearchDiscussions" class="btn-clear-search" aria-label="Effacer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Actions Barre Latérale : Nouvelle Discussion & Plugins & Installation Web App -->
+      <div class="sidebar-action-wrap">
+        <button id="btnSidebarNewChat" class="btn-new-chat">
+          <i class="fa-regular fa-pen-to-square"></i>
+          <span>Nouvelle discussion</span>
+        </button>
+        <button id="btnOpenPlugins" class="btn-sidebar-plugins">
+          <div class="btn-plugins-left">
+            <i class="fa-solid fa-puzzle-piece"></i>
+            <span>Plugins & Applications</span>
+          </div>
+          <span class="plugins-badge" id="pluginsBadgeCount">0</span>
+        </button>
+        <button id="btnInstallPwa" class="btn-sidebar-install" title="Installer l'application sur iPhone, Android ou PC">
+          <div class="btn-install-left">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>Installer l'application</span>
+          </div>
+          <span class="install-pwa-badge"><i class="fa-brands fa-apple"></i> iOS / PWA</span>
+        </button>
+      </div>
+
+      <!-- Discussions Récentes -->
+      <div class="sidebar-section">
+        <div class="section-title">Discussions récentes</div>
+        <div class="recent-chats-list" id="recentChatsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Section Compte Style ChatGPT (En bas) -->
+      <div class="sidebar-account-container" id="sidebarAccountContainer">
+        
+        <!-- Fenêtre Popover Style ChatGPT -->
+        <div class="chatgpt-account-popover" id="chatgptAccountPopover">
+          <div class="popover-user-row" id="popoverUserProfile">
+            <div class="avatar-circle" id="sidebarPopoverAvatar">N</div>
+            <div class="user-meta">
+              <span class="user-name" id="sidebarPopoverUserName">Mon Compte</span>
+              <span class="user-plan" id="sidebarPopoverUserPlan">Free</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+          </div>
+
+          <div class="popover-divider"></div>
+
+          <div class="popover-menu-list">
+            <button type="button" class="popover-item" id="menuItemAuth">
+              <span class="item-icon"><i class="fa-solid fa-user-plus"></i></span>
+              <span class="item-label" id="menuItemAuthLabel">Connexion / Inscription</span>
+            </button>
+            <button type="button" class="popover-item" id="menuItemUpgrade">
+              <span class="item-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+              <span class="item-label">Changer de forfait</span>
+            </button>
+            <button type="button" class="popover-item" id="menuItemCustomization">
+              <span class="item-icon"><i class="fa-solid fa-sliders"></i></span>
+              <span class="item-label">Personnalisation</span>
+            </button>
+            <button type="button" class="popover-item" id="menuItemSettings">
+              <span class="item-icon"><i class="fa-solid fa-gear"></i></span>
+              <span class="item-label">Paramètres</span>
+            </button>
+          </div>
+
+          <div class="popover-divider"></div>
+
+          <div class="popover-menu-list">
+            <button type="button" class="popover-item" id="menuItemHelp">
+              <span class="item-icon"><i class="fa-regular fa-circle-question"></i></span>
+              <span class="item-label">Aide</span>
+              <i class="fa-solid fa-chevron-right chevron-icon"></i>
+            </button>
+            <button type="button" class="popover-item danger-item" id="menuItemLogout">
+              <span class="item-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+              <span class="item-label" id="menuItemLogoutLabel">Se déconnecter</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Déclencheur Compte en bas de la sidebar -->
+        <div class="chatgpt-account-trigger" id="btnToggleAccountPopover" role="button" tabindex="0">
+          <div class="account-left">
+            <div class="avatar-circle" id="sidebarTriggerAvatar">N</div>
+            <div class="account-details">
+              <span class="account-name" id="sidebarTriggerUserName">Mon Compte</span>
+              <span class="account-plan" id="sidebarTriggerUserPlan">Free</span>
+            </div>
+          </div>
+          <button type="button" class="btn-upgrade-pill" id="btnUpgradePill">
+            Mettre à niveau
+          </button>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Grande Fenêtre Paramètres Inspirée de ChatGPT au Thème NORA -->
+    <div class="modal-backdrop settings-backdrop" id="noraSettingsModal">
+      <div class="settings-window-card">
+        
+        <!-- Bouton Fermer Flottant en haut à gauche (comme sur la capture ChatGPT) -->
+        <button class="btn-close-settings-window" id="btnCloseSettingsModal" aria-label="Fermer les paramètres">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="settings-window-layout">
+          
+          <!-- Volet Gauche : Liste des onglets avec barre de recherche -->
+          <aside class="settings-nav-sidebar">
+            <div class="settings-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="inputFilterSettings" placeholder="Rechercher paramètre" autocomplete="off" />
+            </div>
+
+            <nav class="settings-tabs-list" id="settingsTabsList">
+              <button type="button" class="settings-tab-btn active" data-tab="general">
+                <i class="fa-solid fa-gear tab-icon"></i>
+                <span class="tab-label">Général</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="apikey">
+                <i class="fa-solid fa-key tab-icon"></i>
+                <span class="tab-label">Clé API & Modèle</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="plugins">
+                <i class="fa-solid fa-puzzle-piece tab-icon"></i>
+                <span class="tab-label">Plugins & Apps</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="customization">
+                <i class="fa-solid fa-sliders tab-icon"></i>
+                <span class="tab-label">Personnalisation</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="account">
+                <i class="fa-regular fa-user tab-icon"></i>
+                <span class="tab-label">Compte</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="voice">
+                <i class="fa-solid fa-microphone tab-icon"></i>
+                <span class="tab-label">Voix</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="data">
+                <i class="fa-solid fa-database tab-icon"></i>
+                <span class="tab-label">Gestion des données</span>
+              </button>
+              <button type="button" class="settings-tab-btn" data-tab="keyboard">
+                <i class="fa-solid fa-keyboard tab-icon"></i>
+                <span class="tab-label">Raccourcis clavier</span>
+              </button>
+            </nav>
+          </aside>
+
+          <!-- Volet Droit : Contenu du paramètre sélectionné -->
+          <main class="settings-content-panel">
+            
+            <!-- Onglet 1 : Général -->
+            <div class="settings-tab-pane active" id="pane-general">
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Mises à jour de l'application</div>
+                  <div class="row-subtitle">Version actuelle : 1.2026.190 • NORA Intelligence</div>
+                </div>
+                <button type="button" class="btn-settings-action" onclick="alert('NORA est à jour avec la dernière version.')">
+                  Vérifier les mises à jour
+                </button>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Thème de l'interface</div>
+                  <div class="row-subtitle">Adapter l'apparence selon vos préférences</div>
+                </div>
+                <select class="settings-select" id="settingThemeSelect">
+                  <option value="light">Clair (NORA Classic)</option>
+                  <option value="system">Système</option>
+                  <option value="dark">Sombre</option>
+                </select>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Couleur d'accentuation</div>
+                  <div class="row-subtitle">Nuance principale pour l'orbe et les actions</div>
+                </div>
+                <select class="settings-select" id="settingAccentSelect">
+                  <option value="orange">🟠 Ambre NORA (Défaut)</option>
+                  <option value="gold">🟡 Or Solaire</option>
+                  <option value="blue">🔵 Bleu Océan</option>
+                </select>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Taille du texte</div>
+                  <div class="row-subtitle">Ajuster la lisibilité des réponses</div>
+                </div>
+                <div class="text-size-stepper">
+                  <button type="button" class="btn-step" id="btnFontMinus"><i class="fa-solid fa-minus"></i></button>
+                  <button type="button" class="btn-step" id="btnFontPlus"><i class="fa-solid fa-plus"></i></button>
+                  <button type="button" class="btn-step-reset" id="btnFontReset">Réinitialiser</button>
+                </div>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Langue</div>
+                  <div class="row-subtitle">Langue par défaut des réponses de NORA</div>
+                </div>
+                <select class="settings-select" id="settingLanguageSelect">
+                  <option value="auto">Détection automatique</option>
+                  <option value="fr" selected>Français</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Activer la dictée vocale</div>
+                  <div class="row-subtitle">Utiliser la voix dans la zone de saisie du chat</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleSpeechInput" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Onglet 2 : Clé API & Modèle -->
+            <div class="settings-tab-pane" id="pane-apikey">
+              <div class="pane-header">
+                <h3>Connexion au modèle LLM Google Gemini</h3>
+                <p>NORA utilise les modèles officiels Google Gemini. Votre clé est stockée uniquement en local sur votre machine.</p>
+              </div>
+
+              <div class="api-help-box">
+                <i class="fa-regular fa-lightbulb"></i>
+                <div>
+                  Obtenez votre clé d'API gratuite en quelques secondes sur
+                  <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">
+                    Google AI Studio <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+                  </a>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 14px;">
+                <label for="inputGeminiApiKey">Clé API Google Gemini</label>
+                <div class="input-password-wrap">
+                  <input
+                    type="password"
+                    id="inputGeminiApiKey"
+                    placeholder="AIzaSy... ou votre clé API"
+                    autocomplete="off"
+                  />
+                  <button type="button" id="btnToggleKeyVisibility" class="btn-toggle-eye" aria-label="Afficher la clé">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="selectGeminiModel">Modèle de langage (LLM)</label>
+                <select id="selectGeminiModel" class="settings-select" style="width: 100%;">
+                  <option value="gemini-flash-latest" selected>Gemini Flash Latest (Ultra-rapide ⚡, Recommandé)</option>
+                  <option value="gemini-3.8-flash">Gemini 3.8 Flash (Dernière génération ⚡)</option>
+                  <option value="gemini-3.5-flash">Gemini 3.5 Flash (Haute cadence)</option>
+                  <option value="gemini-2.5-pro">Gemini 2.5 Pro (Raisonnement avancé & code)</option>
+                </select>
+              </div>
+
+              <div class="status-box" id="keyStatusBox">
+                <span id="keyStatusText">Aucune clé renseignée (Mode Démo actif)</span>
+              </div>
+
+              <div class="settings-footer-actions">
+                <button type="button" class="btn-secondary" id="btnUseDemoMode">Mode Démo sans clé</button>
+                <button type="button" class="btn-primary" id="btnSaveApiKey">Enregistrer la clé</button>
+              </div>
+            </div>
+
+            <!-- Onglet Plugins : Connecter des applications externes (Mail, WhatsApp, Notion, Drive, etc.) -->
+            <div class="settings-tab-pane" id="pane-plugins">
+              <div class="pane-header">
+                <h3>Plugins & Connexions d'applications</h3>
+                <p>Connectez vos outils préférés via leurs clés API respectives pour permettre à NORA d'interagir directement avec vos données.</p>
+              </div>
+
+              <!-- Filtres de catégories de plugins -->
+              <div class="plugins-filter-bar">
+                <button type="button" class="plugin-filter-pill active" data-filter="all">Tous</button>
+                <button type="button" class="plugin-filter-pill" data-filter="communication">Communication (Mail, WhatsApp)</button>
+                <button type="button" class="plugin-filter-pill" data-filter="productivity">Productivité (Notion, Agenda)</button>
+                <button type="button" class="plugin-filter-pill" data-filter="storage">Stockage (Drive)</button>
+              </div>
+
+              <!-- Grille des plugins disponibles -->
+              <div class="plugins-grid" id="pluginsCatalogGrid">
+                <!-- Dynamically populated by pluginService -->
+              </div>
+            </div>
+
+            <!-- Onglet 3 : Personnalisation -->
+            <div class="settings-tab-pane" id="pane-customization">
+              <div class="pane-header">
+                <h3>Instructions personnalisées</h3>
+                <p>Configurez la façon dont NORA doit vous répondre et adapter son style conversationnel.</p>
+              </div>
+
+              <div class="form-group">
+                <label for="customUserContext">Que souhaitez-vous que NORA sache sur vous pour adapter ses réponses ?</label>
+                <textarea id="customUserContext" rows="3" placeholder="Ex: Je suis créateur de contenu, j'habite à San Francisco, j'aime le minimalisme et les explications claires..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="customTone">Comment préférez-vous que NORA s'exprime ?</label>
+                <textarea id="customTone" rows="3" placeholder="Ex: Ton chaleureux, élégant, orienté solutions pratiques, avec quelques emojis bien choisis..."></textarea>
+              </div>
+
+              <div class="settings-footer-actions">
+                <button type="button" class="btn-primary" id="btnSaveCustomization">Enregistrer les instructions</button>
+              </div>
+            </div>
+
+            <!-- Onglet 4 : Compte -->
+            <div class="settings-tab-pane" id="pane-account">
+              <div class="pane-header">
+                <h3>Informations du compte</h3>
+                <p>Gérez vos identifiants, forfaits et sessions actives.</p>
+              </div>
+
+              <div class="account-profile-banner">
+                <div class="avatar-large" id="settingsAccountAvatar">N</div>
+                <div class="profile-details">
+                  <h4 id="settingsAccountName">Utilisateur NORA</h4>
+                  <p id="settingsAccountEmail">non_connecté@nora.ai</p>
+                  <span class="plan-tag-free" id="settingsAccountPlan">Forfait Free</span>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="btn-primary" id="btnSettingsOpenAuthModal">
+                    <i class="fa-solid fa-user-plus" style="margin-right: 6px;"></i> Connexion / Inscription
+                  </button>
+                  <button type="button" class="btn-secondary" onclick="window.noraAppInstance && window.noraAppInstance.openUpgradeModal()">
+                    Passer à NORA Pro
+                  </button>
+                </div>
+              </div>
+
+              <!-- Configuration Synchronisation Cloud Supabase -->
+              <div class="settings-row" style="margin-top: 20px;">
+                <div class="row-info">
+                  <div class="row-title">Synchronisation Cloud Supabase</div>
+                  <div class="row-subtitle" id="settingsSupabaseSyncSubtitle">Clé publishable active • Sauvegarde automatique des discussions</div>
+                </div>
+                <button type="button" class="btn-settings-action" id="btnSettingsConfigureSupabase">
+                  <i class="fa-solid fa-cloud-arrow-up" style="margin-right: 5px;"></i> Configurer Supabase
+                </button>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Authentification à deux facteurs (MFA)</div>
+                  <div class="row-subtitle">Sécuriser votre compte avec un code d'authentification</div>
+                </div>
+                <button type="button" class="btn-settings-action" onclick="alert('Configuration MFA disponible prochainement.')">
+                  Configurer la MFA
+                </button>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Déconnexion de toutes les sessions</div>
+                  <div class="row-subtitle">Fermer la session sur tous les appareils</div>
+                </div>
+                <button type="button" class="btn-settings-action text-danger" id="btnSettingsLogout">
+                  Se déconnecter
+                </button>
+              </div>
+            </div>
+
+            <!-- Onglet 5 : Voix -->
+            <div class="settings-tab-pane" id="pane-voice">
+              <div class="pane-header">
+                <h3>Synthèse & Reconnaissance vocale</h3>
+                <p>Configurez la voix de NORA et les options d'écoute.</p>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Voix de NORA</div>
+                  <div class="row-subtitle">Personnalité vocale de l'assistante</div>
+                </div>
+                <select class="settings-select">
+                  <option selected>Ambre (Chaleureuse & Naturelle)</option>
+                  <option>Aura (Douce & Posée)</option>
+                  <option>Breeze (Dynamique)</option>
+                </select>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Vitesse d'élocution</div>
+                  <div class="row-subtitle">Vitesse de lecture des réponses audio</div>
+                </div>
+                <select class="settings-select">
+                  <option>0.8x (Lente)</option>
+                  <option selected>1.0x (Normale)</option>
+                  <option>1.2x (Rapide)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Onglet 6 : Données -->
+            <div class="settings-tab-pane" id="pane-data">
+              <div class="pane-header">
+                <h3>Gestion des données & Confidentialité</h3>
+                <p>Contrôlez l'historique de vos discussions et vos données sauvegardées.</p>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Historique des discussions</div>
+                  <div class="row-subtitle">Conserver vos échanges dans la barre latérale</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div class="row-info">
+                  <div class="row-title">Effacer tout l'historique</div>
+                  <div class="row-subtitle">Supprimer définitivement toutes les conversations</div>
+                </div>
+                <button type="button" class="btn-settings-action text-danger" id="btnClearAllHistory">
+                  Tout effacer
+                </button>
+              </div>
+            </div>
+
+            <!-- Onglet 7 : Raccourcis Clavier -->
+            <div class="settings-tab-pane" id="pane-keyboard">
+              <div class="pane-header">
+                <h3>Raccourcis clavier</h3>
+                <p>Naviguez plus rapidement dans l'application avec ces raccourcis.</p>
+              </div>
+
+              <div class="keyboard-shortcuts-list">
+                <div class="shortcut-item">
+                  <span class="action-desc">Envoyer le message</span>
+                  <kbd>Entrée</kbd>
+                </div>
+                <div class="shortcut-item">
+                  <span class="action-desc">Saut de ligne</span>
+                  <div class="keys-combo"><kbd>Maj</kbd> + <kbd>Entrée</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                  <span class="action-desc">Ouvrir / Fermer les paramètres</span>
+                  <div class="keys-combo"><kbd>Ctrl</kbd> + <kbd>,</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                  <span class="action-desc">Nouvelle discussion</span>
+                  <div class="keys-combo"><kbd>Ctrl</kbd> + <kbd>O</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                  <span class="action-desc">Fermer les fenêtres modales</span>
+                  <kbd>Échap</kbd>
+                </div>
+              </div>
+            </div>
+
+          </main>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Changer de forfait (Style ChatGPT Plus / Pro) -->
+    <div class="modal-backdrop" id="upgradeModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="mini-orb"></span>
+            <h2>Changer de forfait</h2>
+          </div>
+          <button class="btn-close" id="btnCloseUpgradeModal" aria-label="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Débloquez la puissance maximale de NORA avec un accès prioritaire et des réponses instantanées.</p>
+          <div class="plans-comparison-grid">
+            <div class="plan-card active">
+              <div class="plan-badge">Actuel</div>
+              <h3>NORA Free</h3>
+              <div class="plan-price">0 $ / mois</div>
+              <p>Accès au modèle Gemini 1.5 Flash et recherche standard.</p>
+            </div>
+            <div class="plan-card premium">
+              <div class="plan-badge-gold"><i class="fa-solid fa-crown" style="font-size: 10px;"></i> Recommandé</div>
+              <h3>NORA Pro</h3>
+              <div class="plan-price">20 $ / mois</div>
+              <p>Gemini 2.0 Flash & Pro, vitesse illimitée et personnalisation totale.</p>
+              <button class="btn-primary" style="width: 100%; margin-top: 12px;" onclick="alert('Option Pro activée !')">Passer à NORA Pro</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Personnalisation (Style ChatGPT Custom Instructions) -->
+    <div class="modal-backdrop" id="customizationModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="mini-orb"></span>
+            <h2>Personnalisation de NORA</h2>
+          </div>
+          <button class="btn-close" id="btnCloseCustomizationModal" aria-label="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Définissez la manière dont NORA doit vous répondre et ce qu'elle doit savoir sur vous.</p>
+          <div class="form-group">
+            <label for="customUserContext">Que souhaitez-vous que NORA sache à votre sujet ?</label>
+            <textarea id="customUserContext" rows="3" placeholder="Ex: Je suis créateur de contenu, j'habite à Paris, je préfère des réponses concises..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="customTone">Comment préférez-vous que NORA s'exprime ?</label>
+            <textarea id="customTone" rows="3" placeholder="Ex: Ton chaleureux, bienveillant, orienté action et concis..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" id="btnSaveCustomization">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Configuration d'un Plugin Spécifique (WhatsApp, Notion, Mail, Drive...) -->
+    <div class="modal-backdrop" id="pluginConfigModal">
+      <div class="modal-card plugin-modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap" id="pluginModalTitleWrap">
+            <span class="plugin-modal-icon-badge" id="pluginModalIconBadge">
+              <i class="fa-solid fa-puzzle-piece"></i>
+            </span>
+            <div>
+              <h2 id="pluginModalName">Configuration Plugin</h2>
+              <span class="plugin-category-tag" id="pluginModalCategory">Intégration</span>
+            </div>
+          </div>
+          <button class="btn-close" id="btnClosePluginModal" aria-label="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-desc" id="pluginModalDesc">
+            Connectez votre compte pour permettre à NORA d'effectuer des requêtes via cette intégration.
+          </p>
+
+          <div class="api-help-box" id="pluginHelpBox">
+            <i class="fa-regular fa-lightbulb"></i>
+            <div>
+              Besoin d'aide pour obtenir vos identifiants d'API ?
+              <a href="#" target="_blank" rel="noopener noreferrer" id="pluginDocLink">
+                Consulter la documentation officielle <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+              </a>
+            </div>
+          </div>
+
+          <form id="pluginConfigForm" class="plugin-form-fields">
+            <!-- Dynamically populated fields for this plugin -->
+          </form>
+
+          <div class="status-box" id="pluginStatusBox" style="margin-top: 14px;">
+            <span id="pluginStatusText">Non connecté</span>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between;">
+          <button type="button" class="btn-secondary text-danger" id="btnDisconnectPlugin" style="display: none;">
+            <i class="fa-regular fa-trash-can" style="margin-right: 4px;"></i> Déconnecter
+          </button>
+          <div style="display: flex; gap: 8px; margin-left: auto;">
+            <button type="button" class="btn-secondary" id="btnCancelPluginConfig">Annuler</button>
+            <button type="button" class="btn-primary" id="btnSavePluginConfig">
+              <i class="fa-solid fa-check" style="margin-right: 4px;"></i> Connecter & Enregistrer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photographer / Recommendation Detail Modal -->
+    <div class="modal-backdrop" id="detailModal">
+      <div class="modal-card detail-card">
+        <button class="btn-close" id="btnCloseDetailModal" aria-label="Fermer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="detailModalBody">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox Modal pour prévisualiser & télécharger les images générées -->
+    <div class="modal-backdrop image-lightbox-backdrop" id="imageLightboxModal">
+      <div class="lightbox-dialog-card">
+        <button type="button" class="btn-close-lightbox" id="btnCloseLightbox" aria-label="Fermer l'image">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="lightbox-image-wrap">
+          <img id="lightboxImg" src="" alt="Création NORA Studio" />
+        </div>
+        <div class="lightbox-footer-bar">
+          <div class="lightbox-prompt-box">
+            <span class="lightbox-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> NORA Studio HD</span>
+            <p id="lightboxPromptText" class="lightbox-prompt-desc"></p>
+          </div>
+          <div class="lightbox-actions-group">
+            <a id="btnDownloadLightbox" href="#" download="nora-creation.jpg" target="_blank" class="btn-primary btn-lightbox-action">
+              <i class="fa-solid fa-download"></i>
+              <span>Télécharger l'image</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Authentification & Synchronisation de Compte NORA -->
+    <div class="modal-backdrop auth-backdrop" id="noraAuthModal">
+      <div class="modal-card auth-window-card">
+        <button class="btn-close" id="btnCloseAuthModal" aria-label="Fermer la fenêtre de connexion">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="auth-window-header">
+          <div class="auth-brand-badge">
+            <span class="auth-brand-orb"></span>
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <h2 class="auth-title">Espace Compte & Synchronisation</h2>
+          <p class="auth-subtitle">Connectez-vous ou créez votre compte pour sauvegarder et synchroniser vos conversations sur tous vos appareils.</p>
+        </div>
+
+        <div class="auth-tabs-bar">
+          <button type="button" class="auth-tab-btn active" id="tabBtnSignIn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Connexion</span>
+          </button>
+          <button type="button" class="auth-tab-btn" id="tabBtnSignUp">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Créer un compte</span>
+          </button>
+        </div>
+
+        <div class="auth-forms-container">
+          <!-- Panneau 1 : Connexion -->
+          <form class="auth-form-pane active" id="formSignIn" novalidate>
+            <div class="auth-alert" id="signInAlert" style="display: none;"></div>
+
+            <div class="auth-field-group">
+              <label for="signInEmail">Adresse e-mail</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-envelope input-leading-icon"></i>
+                <input type="email" id="signInEmail" placeholder="votre.email@exemple.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="auth-field-group">
+              <label for="signInPassword">Mot de passe</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-lock input-leading-icon"></i>
+                <input type="password" id="signInPassword" placeholder="••••••••••••" required autocomplete="current-password" />
+                <button type="button" class="btn-password-toggle" id="btnToggleSignInPassword" aria-label="Afficher/masquer le mot de passe">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-auth-submit" id="btnSubmitSignIn">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              <span>Se connecter</span>
+            </button>
+
+            <div class="auth-footer-prompt">
+              <span>Pas encore de compte ?</span>
+              <button type="button" class="btn-auth-switch" id="btnSwitchToSignUp">Créer un compte gratuitement</button>
+            </div>
+          </form>
+
+          <!-- Panneau 2 : Inscription -->
+          <form class="auth-form-pane" id="formSignUp" novalidate style="display: none;">
+            <div class="auth-alert" id="signUpAlert" style="display: none;"></div>
+
+            <div class="auth-field-group">
+              <label for="signUpFullName">Votre nom ou pseudo</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-user input-leading-icon"></i>
+                <input type="text" id="signUpFullName" placeholder="Ex: Alex Moreau" required autocomplete="name" />
+              </div>
+            </div>
+
+            <div class="auth-field-group">
+              <label for="signUpEmail">Adresse e-mail</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-envelope input-leading-icon"></i>
+                <input type="email" id="signUpEmail" placeholder="votre.email@exemple.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="auth-field-group">
+              <label for="signUpPassword">Mot de passe</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-lock input-leading-icon"></i>
+                <input type="password" id="signUpPassword" placeholder="Au moins 6 caractères" required minlength="6" autocomplete="new-password" />
+                <button type="button" class="btn-password-toggle" id="btnToggleSignUpPassword" aria-label="Afficher/masquer le mot de passe">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-auth-submit" id="btnSubmitSignUp">
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Créer mon compte NORA</span>
+            </button>
+
+            <div class="auth-footer-prompt">
+              <span>Déjà un compte ?</span>
+              <button type="button" class="btn-auth-switch" id="btnSwitchToSignIn">Se connecter</button>
+            </div>
+            <div style="text-align: center; margin-top: 8px;">
+              <a href="/signup.html" style="font-size: 12px; color: #71717A; text-decoration: underline;">
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px; margin-right: 4px;"></i> Ouvrir la page complète d'inscription
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Section Supabase Cloud Sync Optionnel / Déployé -->
+        <div class="supabase-sync-section">
+          <button type="button" class="btn-toggle-cloud-config" id="btnToggleCloudConfig">
+            <div class="cloud-info-summary">
+              <i class="fa-solid fa-server"></i>
+              <span>Configuration Supabase Cloud Sync</span>
+            </div>
+            <i class="fa-solid fa-chevron-down toggle-chevron" id="cloudConfigChevron"></i>
+          </button>
+
+          <div class="cloud-config-expandable" id="cloudConfigDrawer" style="display: none;">
+            <p class="cloud-config-desc">
+              La clé API publishable de Supabase fournie est déjà préconfigurée. Renseignez l'URL de votre projet Supabase pour activer la synchronisation cloud en temps réel.
+            </p>
+            <div class="auth-field-group">
+              <label for="supabaseProjectUrlInput">URL du projet Supabase</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-globe input-leading-icon"></i>
+                <input type="url" id="supabaseProjectUrlInput" placeholder="https://votre-projet.supabase.co" />
+              </div>
+            </div>
+            <div class="auth-field-group">
+              <label for="supabaseApiKeyInput">Clé Supabase (Publishable)</label>
+              <div class="auth-input-wrapper">
+                <i class="fa-solid fa-key input-leading-icon"></i>
+                <input type="text" id="supabaseApiKeyInput" value="sb_publishable_H2fbkN4guUawv4UXfwIG1g_BZyX1maN" />
+              </div>
+            </div>
+            <button type="button" class="btn-save-cloud-config" id="btnSaveCloudConfig">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Enregistrer la configuration Cloud</span>
+            </button>
+          </div>
+        </div>
+
+    <!-- Modal Guide d'installation iPhone / iOS & PWA -->
+    <div class="modal-backdrop ios-install-backdrop" id="iosInstallModal">
+      <div class="ios-install-card">
+        <button class="btn-close-ios-install" id="btnCloseIosInstall" aria-label="Fermer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        
+        <div class="ios-install-header">
+          <div class="app-icon-preview">
+            <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%20width='512'%20height='512'%3e%3crect%20width='512'%20height='512'%20rx='112'%20fill='%23000000'/%3e%3cpath%20d='M150%20380V132H200L312%20290V132H362V380H312L200%20222V380Z'%20fill='%23FFFFFF'/%3e%3c/svg%3e" alt="NORA Logo" class="preview-logo-img" />
+          </div>
+          <div class="app-info-text">
+            <h3>Installer NORA sur iPhone</h3>
+            <p>Profitez d'une expérience plein écran ultra-rapide comme une application native iOS.</p>
+          </div>
+        </div>
+
+        <div class="ios-install-steps">
+          <div class="ios-step-row">
+            <div class="step-badge">1</div>
+            <div class="step-text-wrap">
+              <div class="step-title">Touchez le bouton Partager</div>
+              <div class="step-detail">En bas de votre écran dans Safari, appuyez sur l'icône :</div>
+              <div class="step-visual-pill">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                <span>Partager (Share)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ios-step-row">
+            <div class="step-badge">2</div>
+            <div class="step-text-wrap">
+              <div class="step-title">Sélectionnez « Sur l'écran d'accueil »</div>
+              <div class="step-detail">Faites défiler le menu d'actions Safari et touchez :</div>
+              <div class="step-visual-pill">
+                <i class="fa-regular fa-square-plus"></i>
+                <span>Sur l'écran d'accueil</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ios-step-row">
+            <div class="step-badge">3</div>
+            <div class="step-text-wrap">
+              <div class="step-title">Validez en touchant « Ajouter »</div>
+              <div class="step-detail">Appuyez sur <strong>Ajouter</strong> en haut à droite. L'icône NORA apparaîtra instantanément sur votre écran d'accueil !</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ios-install-footer">
+          <button type="button" class="btn-ios-done" id="btnIosInstallDone">
+            J'ai compris
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "icons": "node scripts/generate-icons.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "powershell -ExecutionPolicy Bypass -File scripts/push-gh-pages.ps1"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
