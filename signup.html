@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Créer un compte — NORA AI & Supabase Cloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/src/styles/main.scss" />
+</head>
+<body class="signup-page-body">
+
+  <!-- En-tête de navigation -->
+  <header class="signup-navbar">
+    <a href="/index.html" class="nav-brand-link">
+      <span class="brand-mini-orb"></span>
+      <span>NORA</span>
+    </a>
+    <div class="nav-right-actions">
+      <a href="/index.html" class="btn-nav-back">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Retour au Chat</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Conteneur principal split-screen -->
+  <main class="signup-main-container">
+    <div class="signup-content-layout" id="signupLayoutContainer">
+
+      <!-- Volet gauche : Présentation & Fonctionnalités NORA -->
+      <section class="signup-hero-side">
+        <div>
+          <div class="hero-orb-showcase">
+            <div class="showcase-orb"></div>
+            <div class="showcase-title-box">
+              <h2>NORA AI Studio</h2>
+              <span>Intelligence Artificielle & Cloud</span>
+            </div>
+          </div>
+
+          <div class="hero-intro-text">
+            <h1 id="heroBannerTitle">Créez votre compte NORA</h1>
+            <p>Synchronisez automatiquement vos conversations, connectez vos plugins métier et profitez d'une IA d'élite sur tous vos appareils.</p>
+          </div>
+
+          <div class="hero-features-list">
+            <div class="feature-card-item">
+              <div class="feature-icon-badge supabase-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <div class="feature-text">
+                <h4>Synchronisation Supabase Cloud</h4>
+                <p>Vos conversations et votre profil sont sécurisés et accessibles sur vos tables <code>profiles</code> et <code>ai_conversations</code>.</p>
+              </div>
+            </div>
+
+            <div class="feature-card-item">
+              <div class="feature-icon-badge ai-icon">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div class="feature-text">
+                <h4>Modèles Gemini Ultra-rapides</h4>
+                <p>Réponses rapides, structurées en thèmes, paragraphes et listes de points élégantes.</p>
+              </div>
+            </div>
+
+            <div class="feature-card-item">
+              <div class="feature-icon-badge plugin-icon">
+                <i class="fa-solid fa-plug"></i>
+              </div>
+              <div class="feature-text">
+                <h4>Écosystème de Plugins</h4>
+                <p>Intégrez Gmail, WhatsApp Business, Notion et Google Drive directement dans vos discussions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-footer-badge">
+          <span class="pulse-dot"></span>
+          <span>Supabase Cloud Sync Connecté</span>
+        </div>
+      </section>
+
+      <!-- Volet droit : Formulaire d'inscription & Connexion -->
+      <section class="signup-form-side">
+        <div class="form-header-block">
+          <h2 class="form-title" id="formMainTitle">Création de compte</h2>
+          <p class="form-subtitle" id="formMainSubtitle">Renseignez vos coordonnées pour créer votre profil Supabase.</p>
+        </div>
+
+        <div class="signup-alert-box" id="signupAlert" style="display: none;"></div>
+
+        <form id="signupForm" novalidate>
+          <div class="form-grid-fields">
+
+            <!-- Ligne Prénom et Nom (Colonnes first_name & last_name de la table profiles) -->
+            <div class="form-fields-row signup-fields-row" id="rowNames">
+              <div class="signup-field-group">
+                <label for="inputFirstName">Prénom</label>
+                <div class="signup-input-wrap">
+                  <i class="fa-solid fa-user field-icon"></i>
+                  <input type="text" id="inputFirstName" placeholder="Ex: Alex" required autocomplete="given-name" />
+                </div>
+              </div>
+
+              <div class="signup-field-group">
+                <label for="inputLastName">Nom</label>
+                <div class="signup-input-wrap">
+                  <i class="fa-solid fa-user-tag field-icon"></i>
+                  <input type="text" id="inputLastName" placeholder="Ex: Moreau" required autocomplete="family-name" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Adresse e-mail (Colonne email) -->
+            <div class="signup-field-group">
+              <label for="inputEmail">Adresse e-mail</label>
+              <div class="signup-input-wrap">
+                <i class="fa-solid fa-envelope field-icon"></i>
+                <input type="email" id="inputEmail" placeholder="votre.email@exemple.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="signup-field-group">
+              <label for="inputPassword">Mot de passe</label>
+              <div class="signup-input-wrap">
+                <i class="fa-solid fa-lock field-icon"></i>
+                <input type="password" id="inputPassword" placeholder="Au moins 6 caractères" required minlength="6" autocomplete="new-password" />
+                <button type="button" class="btn-field-eye" id="btnTogglePassword" aria-label="Afficher/masquer le mot de passe">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+
+              <!-- Jauge de sécurité du mot de passe -->
+              <div class="password-strength-container" id="passwordStrengthBox">
+                <div class="strength-bars-track">
+                  <div class="strength-bar" id="strBar1"></div>
+                  <div class="strength-bar" id="strBar2"></div>
+                  <div class="strength-bar" id="strBar3"></div>
+                </div>
+                <span class="strength-label-text" id="strengthLabelText">Sécurité</span>
+              </div>
+            </div>
+
+            <!-- Confirmation du mot de passe -->
+            <div class="signup-field-group confirm-password-group" id="groupConfirmPassword">
+              <label for="inputConfirmPassword">Confirmer le mot de passe</label>
+              <div class="signup-input-wrap">
+                <i class="fa-solid fa-shield-halved field-icon"></i>
+                <input type="password" id="inputConfirmPassword" placeholder="Retapez votre mot de passe" required autocomplete="new-password" />
+                <button type="button" class="btn-field-eye" id="btnToggleConfirmPassword" aria-label="Afficher/masquer la confirmation">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Case à cocher Conditions -->
+            <div class="signup-checkbox-row" id="rowTerms">
+              <input type="checkbox" id="checkTerms" checked required />
+              <label for="checkTerms">J'accepte la création de mon profil et la sauvegarde de mes conversations sur Supabase Cloud.</label>
+            </div>
+
+          </div>
+
+          <!-- Bouton de soumission -->
+          <button type="submit" class="btn-submit-signup-action" id="btnSubmitSignup">
+            <i class="fa-solid fa-user-plus" id="btnSubmitIcon"></i>
+            <span id="btnSubmitLabel">Créer mon compte NORA</span>
+          </button>
+        </form>
+
+        <!-- Bascule Inscription / Connexion -->
+        <div class="form-footer-prompts">
+          <div class="switch-mode-text">
+            <span id="switchPromptText">Déjà inscrit sur NORA ?</span>
+            <a href="#" class="link-switch-auth" id="btnToggleAuthMode">Se connecter</a>
+          </div>
+          <a href="/index.html" class="link-guest-mode">Continuer en mode invité sans compte</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script type="module" src="/src/signup.js"></script>
+</body>
+</html>

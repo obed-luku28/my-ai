@@ -203,6 +203,8 @@ class NoraConversationalApp {
     this.settingsAccountPlan = document.getElementById('settingsAccountPlan');
     this.btnSettingsOpenAuthModal = document.getElementById('btnSettingsOpenAuthModal');
     this.btnSettingsConfigureSupabase = document.getElementById('btnSettingsConfigureSupabase');
+    this.btnHeaderAuth = document.getElementById('btnHeaderAuth');
+    this.headerAuthLabel = document.getElementById('headerAuthLabel');
     this.heroTitle = document.getElementById('heroTitle');
   }
 
@@ -266,7 +268,13 @@ class NoraConversationalApp {
       this.menuItemAuth.addEventListener('click', () => {
         this.closeAccountPopover();
         this.closeSidebar();
-        this.openAuthModal('signin');
+        window.location.href = '/signup.html';
+      });
+    }
+    if (this.btnSettingsOpenAuthModal) {
+      this.btnSettingsOpenAuthModal.addEventListener('click', () => {
+        this.closeSettingsModal();
+        window.location.href = '/signup.html';
       });
     }
     if (this.popoverUserProfile) {
@@ -1578,6 +1586,24 @@ class NoraConversationalApp {
     }
     if (this.menuItemLogoutLabel) {
       this.menuItemLogoutLabel.textContent = isAuth ? 'Se déconnecter' : 'Effacer la session';
+    }
+
+    // Header Auth Badge
+    if (this.headerAuthLabel) {
+      if (isAuth && user.name) {
+        const firstName = user.name.split(' ')[0];
+        this.headerAuthLabel.textContent = firstName;
+        if (this.btnHeaderAuth) {
+          this.btnHeaderAuth.title = `Connecté : ${user.name} (${user.email}) — Cliquez pour gérer votre compte`;
+          this.btnHeaderAuth.classList.add('user-connected');
+        }
+      } else {
+        this.headerAuthLabel.textContent = 'Connexion';
+        if (this.btnHeaderAuth) {
+          this.btnHeaderAuth.title = 'Créer un compte ou se connecter à NORA';
+          this.btnHeaderAuth.classList.remove('user-connected');
+        }
+      }
     }
 
     // Hero Title

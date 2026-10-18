@@ -5,13 +5,18 @@ const STORAGE_KEY_SUPABASE_KEY = 'nora_supabase_key';
 const STORAGE_KEY_CURRENT_USER = 'nora_current_user';
 const STORAGE_KEY_LOCAL_USERS = 'nora_local_registered_users';
 
-export const DEFAULT_SUPABASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_URL) || 'https://meslwflzjpvcimsvwbmx.supabase.co';
+export const DEFAULT_SUPABASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_URL) || 'https://meslwflzjvwcimsvwbmx.supabase.co';
 export const DEFAULT_SUPABASE_KEY = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_ANON_KEY) || 'sb_publishable_H2fbkN4guUawv4UXfwIG1g_BZyX1maN';
 
 export class AuthService {
   constructor() {
+    let savedUrl = localStorage.getItem(STORAGE_KEY_SUPABASE_URL);
+    if (!savedUrl || savedUrl.includes('jpv') || !savedUrl.includes('meslwflzjvwcimsvwbmx')) {
+      savedUrl = DEFAULT_SUPABASE_URL;
+      localStorage.setItem(STORAGE_KEY_SUPABASE_URL, DEFAULT_SUPABASE_URL);
+    }
     this.supabaseKey = localStorage.getItem(STORAGE_KEY_SUPABASE_KEY) || DEFAULT_SUPABASE_KEY;
-    this.supabaseUrl = localStorage.getItem(STORAGE_KEY_SUPABASE_URL) || DEFAULT_SUPABASE_URL;
+    this.supabaseUrl = savedUrl;
     this.supabase = null;
     this.currentUser = null;
     this.listeners = [];
@@ -122,13 +127,15 @@ export class AuthService {
   /**
    * Création d'un nouveau compte utilisateur
    */
-  async signUp({ name, email, password, supabaseUrl = '' }) {
+  async signUp({ firstName = '', lastName = '', name = '', email, password, supabaseUrl = '' }) {
     if (supabaseUrl) {
       this.setSupabaseUrl(supabaseUrl);
     }
 
-    const cleanName = (name || '').trim();
     const cleanEmail = (email || '').trim().toLowerCase();
+    const fName = (firstName || '').trim();
+    const lName = (lastName || '').trim();
+    const cleanName = (name || `${fName} ${lName}`).trim() || (fName || lName || cleanEmail.split('@')[0]);
 
     if (!cleanEmail || !password || password.length < 6) {
       throw new Error('Email valide et mot de passe de 6 caractères minimum requis.');
@@ -136,39 +143,59 @@ export class AuthService {
 
     let supabaseAuthUser = null;
 
-    // 1. Tenter la création via Supabase si l'URL est configurée
+    // 1. Tenter la création via Supabase Auth
     if (this.isCloudConfigured()) {
       try {
         const { data, error } = await this.supabase.auth.signUp({
           email: cleanEmail,
           password: password,
           options: {
-            data: { full_name: cleanName }
+            data: {
+              first_name: fName || cleanName,
+              last_name: lName,
+              full_name: cleanName
+            }
           }
         });
 
         if (error) {
           console.warn('Supabase Auth SignUp error:', error);
-          // Si erreur réseau ou domaine, on informe l'utilisateur
           throw error;
         }
         supabaseAuthUser = data.user;
+
+        // 2. Insérer dans la table public.profiles de Supabase
+        if (supabaseAuthUser && this.isValidUuid(supabaseAuthUser.id)) {
+          try {
+            await this.supabase.from('profiles').upsert({
+              id: supabaseAuthUser.id,
+              first_name: fName || cleanName,
+              last_name: lName,
+              email: cleanEmail,
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'id' });
+          } catch (pErr) {
+            console.warn('Supabase profiles table insert note:', pErr);
+          }
+        }
       } catch (err) {
-        console.warn('Tentative Supabase cloud échouée, bascule locale sécurisée:', err);
-        // Si Supabase renvoie une erreur critique non-réseau, relancer
+        console.warn('Tentative Supabase cloud:', err);
+        // Si Supabase renvoie une erreur critique (ex: email déjà pris), relancer
         if (err.status && err.status !== 0 && !err.message.includes('fetch')) {
           throw err;
         }
       }
     }
 
-    // 2. Persistance locale sécurisée du profil utilisateur
+    // 3. Persistance locale sécurisée du profil utilisateur
     const userId = supabaseAuthUser ? supabaseAuthUser.id : 'usr_' + Date.now();
     const userProfile = {
       id: userId,
-      name: cleanName || cleanEmail.split('@')[0],
+      firstName: fName || cleanName.split(' ')[0],
+      lastName: lName || (cleanName.split(' ').slice(1).join(' ') || ''),
+      name: cleanName,
       email: cleanEmail,
-      initials: this.computeInitials(cleanName || cleanEmail),
+      initials: this.computeInitials(cleanName),
       plan: 'Free',
       isGuest: false,
       createdAt: new Date().toISOString(),
@@ -179,7 +206,7 @@ export class AuthService {
     const localUsers = this.getLocalUsers();
     localUsers[cleanEmail] = {
       profile: userProfile,
-      passwordHash: btoa(password) // encodage basique pour persistance locale
+      passwordHash: btoa(password)
     };
     this.saveLocalUsers(localUsers);
 
@@ -215,7 +242,6 @@ export class AuthService {
 
         if (error) {
           console.warn('Supabase signInWithPassword:', error.message);
-          // Si l'erreur est identifiants invalides sur cloud, vérifier localement d'abord
         } else {
           supabaseAuthUser = data.user;
         }
@@ -238,7 +264,7 @@ export class AuthService {
       }
     }
 
-    const profile = localRecord ? localRecord.profile : {
+    let profile = localRecord ? localRecord.profile : {
       id: supabaseAuthUser.id,
       name: supabaseAuthUser.user_metadata?.full_name || cleanEmail.split('@')[0],
       email: cleanEmail,
@@ -247,6 +273,27 @@ export class AuthService {
       isGuest: false,
       cloudSynced: true
     };
+
+    // 3. Charger le profil depuis la table public.profiles si connecté à Supabase
+    if (this.isCloudConfigured() && supabaseAuthUser) {
+      try {
+        const { data: profileRow } = await this.supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', supabaseAuthUser.id)
+          .maybeSingle();
+
+        if (profileRow) {
+          const combined = `${profileRow.first_name || ''} ${profileRow.last_name || ''}`.trim();
+          if (combined) {
+            profile.name = combined;
+            profile.firstName = profileRow.first_name || '';
+            profile.lastName = profileRow.last_name || '';
+            profile.initials = this.computeInitials(combined);
+          }
+        }
+      } catch (e) {}
+    }
 
     this.setCurrentSession(profile);
     return profile;

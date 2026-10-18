@@ -31,6 +31,11 @@
       </div>
 
       <div class="header-right">
+        <!-- Accès direct création de compte / connexion -->
+        <a href="/signup.html" class="header-auth-badge" id="btnHeaderAuth" title="Créer un compte ou se connecter">
+          <i class="fa-solid fa-user-circle"></i>
+          <span class="auth-label-text" id="headerAuthLabel">Connexion</span>
+        </a>
         <button id="btnApiKey" class="btn-api-badge clean-header-btn" aria-label="Paramètres" title="Paramètres et configuration">
           <span class="status-dot" id="apiStatusDot"></span>
           <i class="fa-solid fa-sliders" style="font-size: 13px;"></i>
@@ -913,6 +918,11 @@
             <div class="auth-footer-prompt">
               <span>Déjà un compte ?</span>
               <button type="button" class="btn-auth-switch" id="btnSwitchToSignIn">Se connecter</button>
+            </div>
+            <div style="text-align: center; margin-top: 8px;">
+              <a href="/signup.html" style="font-size: 12px; color: #71717A; text-decoration: underline;">
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px; margin-right: 4px;"></i> Ouvrir la page complète d'inscription
+              </a>
             </div>
           </form>
         </div>
