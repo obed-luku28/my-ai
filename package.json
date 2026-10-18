@@ -7,9 +7,12 @@
     "dev": "vite --host --port 5173",
     "build": "vite build",
     "preview": "vite preview",
-    "icons": "node scripts/generate-icons.js"
+    "icons": "node scripts/generate-icons.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "sass": "^1.83.0",
     "sharp": "^0.35.5",
     "vite": "^6.0.7"

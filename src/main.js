@@ -309,13 +309,13 @@ class NoraConversationalApp {
       this.menuItemAuth.addEventListener('click', () => {
         this.closeAccountPopover();
         this.closeSidebar();
-        window.location.href = '/signup.html';
+        window.location.href = './signup.html';
       });
     }
     if (this.btnSettingsOpenAuthModal) {
       this.btnSettingsOpenAuthModal.addEventListener('click', () => {
         this.closeSettingsModal();
-        window.location.href = '/signup.html';
+        window.location.href = './signup.html';
       });
     }
     if (this.popoverUserProfile) {

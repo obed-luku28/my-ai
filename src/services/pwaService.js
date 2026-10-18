@@ -38,7 +38,8 @@ export class PwaService {
   registerServiceWorker() {
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        const swUrl = new URL('./sw.js', window.location.href).href;
+        navigator.serviceWorker.register(swUrl)
           .then((reg) => {
             console.log('NORA PWA ServiceWorker enregistré avec succès:', reg.scope);
           })

@@ -96,7 +96,7 @@ class NoraSignupApp {
       const user = authService.getCurrentUser();
       this.showAlert('success', `Vous êtes déjà connecté en tant que ${user.name || user.email}. Redirection vers NORA...`);
       setTimeout(() => {
-        window.location.href = '/index.html';
+        window.location.href = './index.html';
       }, 1200);
     }
   }
@@ -273,7 +273,7 @@ class NoraSignupApp {
         this.showAlert('success', `Bienvenue ${userProfile.name} ! Votre compte et votre profil Supabase ont été créés avec succès. Redirection vers NORA...`);
 
         setTimeout(() => {
-          window.location.href = '/index.html';
+          window.location.href = './index.html';
         }, 1200);
       } catch (err) {
         this.showAlert('error', this.formatAuthError(err));
@@ -289,7 +289,7 @@ class NoraSignupApp {
         this.showAlert('success', `Ravi de vous revoir ${userProfile.name || userProfile.email} ! Synchronisation active.`);
 
         setTimeout(() => {
-          window.location.href = '/index.html';
+          window.location.href = './index.html';
         }, 1000);
       } catch (err) {
         this.showAlert('error', this.formatAuthError(err));
@@ -326,10 +326,10 @@ class NoraSignupApp {
 document.addEventListener('DOMContentLoaded', () => {
   new NoraSignupApp();
 
-  // Enregistrement PWA Service Worker
   if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
+      const swUrl = new URL('./sw.js', window.location.href).href;
+      navigator.serviceWorker.register(swUrl).catch(() => {});
     });
   }
 });

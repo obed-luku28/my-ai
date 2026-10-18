@@ -1,21 +1,23 @@
 // NORA AI Assistant — Service Worker PWA (Production)
-const CACHE_NAME = 'nora-pwa-v1.0.1';
+const CACHE_NAME = 'nora-pwa-v1.0.2';
+
+const BASE = self.registration ? self.registration.scope : '/';
 
 const STATIC_PRECACHE = [
-  '/',
-  '/index.html',
-  '/signup.html',
-  '/manifest.webmanifest',
-  '/favicon.svg',
-  '/favicon.png',
-  '/apple-touch-icon.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/icons/apple-touch-icon.png',
-  '/icons/apple-touch-icon-180x180.png',
-  '/icons/apple-touch-icon-152x152.png',
-  '/icons/favicon-32x32.png',
-  '/icons/favicon-16x16.png'
+  new URL('./', BASE).pathname,
+  new URL('./index.html', BASE).pathname,
+  new URL('./signup.html', BASE).pathname,
+  new URL('./manifest.webmanifest', BASE).pathname,
+  new URL('./favicon.svg', BASE).pathname,
+  new URL('./favicon.png', BASE).pathname,
+  new URL('./apple-touch-icon.png', BASE).pathname,
+  new URL('./icons/icon-192x192.png', BASE).pathname,
+  new URL('./icons/icon-512x512.png', BASE).pathname,
+  new URL('./icons/apple-touch-icon.png', BASE).pathname,
+  new URL('./icons/apple-touch-icon-180x180.png', BASE).pathname,
+  new URL('./icons/apple-touch-icon-152x152.png', BASE).pathname,
+  new URL('./icons/favicon-32x32.png', BASE).pathname,
+  new URL('./icons/favicon-16x16.png', BASE).pathname
 ];
 
 // Installation : pré-mise en cache des ressources critiques
@@ -76,9 +78,9 @@ self.addEventListener('fetch', (event) => {
           const cached = await caches.match(event.request);
           if (cached) return cached;
           if (url.pathname.includes('signup')) {
-            return caches.match('/signup.html');
+            return caches.match(new URL('./signup.html', BASE).pathname);
           }
-          return caches.match('/index.html');
+          return caches.match(new URL('./index.html', BASE).pathname);
         })
     );
     return;
