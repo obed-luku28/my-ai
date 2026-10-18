@@ -68,7 +68,6 @@ class NoraConversationalApp {
     this.popoverUserProfile = document.getElementById('popoverUserProfile');
     this.menuItemUpgrade = document.getElementById('menuItemUpgrade');
     this.menuItemCustomization = document.getElementById('menuItemCustomization');
-    this.menuItemProfile = document.getElementById('menuItemProfile');
     this.menuItemSettings = document.getElementById('menuItemSettings');
     this.menuItemHelp = document.getElementById('menuItemHelp');
     this.menuItemLogout = document.getElementById('menuItemLogout');
@@ -270,38 +269,45 @@ class NoraConversationalApp {
         this.openAuthModal('signin');
       });
     }
-    this.popoverUserProfile.addEventListener('click', () => {
-      this.closeAccountPopover();
-      this.closeSidebar();
-      this.openSettingsModal('account');
-    });
-    this.menuItemUpgrade.addEventListener('click', () => {
-      this.closeAccountPopover();
-      this.openUpgradeModal();
-    });
-    this.menuItemCustomization.addEventListener('click', () => {
-      this.closeAccountPopover();
-      this.closeSidebar();
-      this.openSettingsModal('customization');
-    });
-    this.menuItemProfile.addEventListener('click', () => {
-      this.closeAccountPopover();
-      this.closeSidebar();
-      this.openSettingsModal('account');
-    });
-    this.menuItemSettings.addEventListener('click', () => {
-      this.closeAccountPopover();
-      this.closeSidebar();
-      this.openSettingsModal('general');
-    });
-    this.menuItemHelp.addEventListener('click', () => {
-      this.closeAccountPopover();
-      window.open('https://aistudio.google.com/app/apikey', '_blank');
-    });
-    this.menuItemLogout.addEventListener('click', () => {
-      this.closeAccountPopover();
-      this.handleLogout();
-    });
+    if (this.popoverUserProfile) {
+      this.popoverUserProfile.addEventListener('click', () => {
+        this.closeAccountPopover();
+        this.closeSidebar();
+        this.openSettingsModal('account');
+      });
+    }
+    if (this.menuItemUpgrade) {
+      this.menuItemUpgrade.addEventListener('click', () => {
+        this.closeAccountPopover();
+        this.openUpgradeModal();
+      });
+    }
+    if (this.menuItemCustomization) {
+      this.menuItemCustomization.addEventListener('click', () => {
+        this.closeAccountPopover();
+        this.closeSidebar();
+        this.openSettingsModal('customization');
+      });
+    }
+    if (this.menuItemSettings) {
+      this.menuItemSettings.addEventListener('click', () => {
+        this.closeAccountPopover();
+        this.closeSidebar();
+        this.openSettingsModal('general');
+      });
+    }
+    if (this.menuItemHelp) {
+      this.menuItemHelp.addEventListener('click', () => {
+        this.closeAccountPopover();
+        window.open('https://aistudio.google.com/app/apikey', '_blank');
+      });
+    }
+    if (this.menuItemLogout) {
+      this.menuItemLogout.addEventListener('click', () => {
+        this.closeAccountPopover();
+        this.handleLogout();
+      });
+    }
 
     // Close account popover on outside click
     document.addEventListener('click', (e) => {
@@ -541,24 +547,39 @@ class NoraConversationalApp {
     });
 
     // Search form submission
-    this.searchForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      this.handleSend();
-    });
+    if (this.searchForm) {
+      this.searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.handleSend();
+      });
+    }
+
+    // Direct Send button click
+    if (this.btnSend) {
+      this.btnSend.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.handleSend();
+      });
+    }
 
     // Enter to submit (Shift+Enter for newline)
-    this.promptInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        this.handleSend();
-      }
-    });
+    if (this.promptInput) {
+      this.promptInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.handleSend();
+        }
+      });
 
-    // Auto-grow textarea
-    this.promptInput.addEventListener('input', () => {
-      this.promptInput.style.height = 'auto';
-      this.promptInput.style.height = Math.min(this.promptInput.scrollHeight, 120) + 'px';
-    });
+      // Auto-grow textarea
+      this.promptInput.addEventListener('input', () => {
+        this.promptInput.style.height = 'auto';
+        this.promptInput.style.height = Math.min(this.promptInput.scrollHeight, 120) + 'px';
+      });
+    }
 
     // Suggestion chips
     this.suggestionsGrid.addEventListener('click', (e) => {
