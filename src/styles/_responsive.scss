@@ -1,0 +1,433 @@
+@use "variables" as *;
+
+/* ==========================================================================
+   MOBILE ADAPTATIONS (< 768px) — PRO CHATGPT MOBILE EXPERIENCE
+   ========================================================================== */
+@media (max-width: 767px) {
+  // En-tête mobile compact et ergonomique
+  .app-header {
+    padding: 8px 12px;
+    min-height: 50px;
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      font-size: 16px;
+    }
+
+    .brand-title .brand-name {
+      font-size: 16px;
+    }
+
+    .btn-api-badge {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 12px;
+    }
+  }
+
+  // Contenu principal & défilement
+  .main-content {
+    padding: 0 12px 135px;
+  }
+
+  .content-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Vue d'accueil NORA
+  .hero-view {
+    padding: 20px 6px 14px;
+
+    .hero-orb-wrapper {
+      margin-bottom: 16px;
+    }
+
+    .nora-orb {
+      width: 110px;
+      height: 110px;
+    }
+
+    .hero-title {
+      font-size: 21px;
+      line-height: 1.35;
+      margin-bottom: 20px;
+      max-width: 290px;
+    }
+
+    .suggestions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+
+      .chip-item {
+        font-size: 12.5px;
+        padding: 10px 14px;
+        border-radius: 16px;
+        text-align: left;
+        width: 100%;
+        line-height: 1.35;
+      }
+    }
+  }
+
+  // Défilement du flux de conversation
+  .chat-stream {
+    gap: 20px;
+    padding-top: 10px;
+
+    .message-item {
+      &.user-message {
+        .bubble {
+          max-width: 88%;
+          font-size: 14px;
+          padding: 10px 14px;
+          border-radius: 18px 18px 4px 18px;
+        }
+      }
+
+      &.assistant-message {
+        .assistant-header {
+          gap: 6px;
+          font-size: 12.5px;
+        }
+
+        .assistant-body {
+          font-size: 14px;
+          line-height: 1.6;
+
+          p {
+            margin-bottom: 10px;
+          }
+
+          .code-snippet-box {
+            margin: 12px -4px;
+            border-radius: 12px;
+
+            .code-header {
+              padding: 7px 12px;
+              font-size: 11px;
+            }
+
+            .code-content {
+              padding: 12px;
+              font-size: 12px;
+            }
+          }
+
+          .cards-carousel {
+            margin: 12px -12px;
+            padding: 4px 12px 10px;
+
+            .photographer-card {
+              flex: 0 0 140px;
+              width: 140px;
+
+              .card-image-wrap {
+                width: 140px;
+                height: 140px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Barre d'invitation flottante (Footer)
+  .app-footer {
+    padding: 6px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+
+    .footer-container {
+      max-width: 100%;
+    }
+  }
+
+  .search-box-card {
+    padding: 8px 10px 6px 12px;
+    border-radius: 22px;
+    gap: 6px;
+
+    .btn-input-plus {
+      width: 32px;
+      height: 32px;
+      font-size: 13px;
+    }
+
+    .active-mode-tag {
+      padding: 3px 8px;
+      font-size: 11px;
+    }
+
+    .input-line textarea {
+      font-size: 16px !important; // Empêche le zoom automatique sur iPhone Safari
+      min-height: 22px;
+      line-height: 22px;
+    }
+
+    .btn-send {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+  }
+
+  // Popover Outils & Créations
+  .input-actions-popover {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    bottom: 64px;
+    border-radius: 18px;
+
+    .popover-action-list .input-action-item {
+      padding: 10px 12px;
+      gap: 10px;
+
+      .action-item-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 13.5px;
+      }
+
+      .action-item-text {
+        .item-title {
+          font-size: 13px;
+        }
+        .item-desc {
+          font-size: 11px;
+        }
+      }
+    }
+  }
+
+  // Menu latéral Sidebar Drawer
+  .sidebar-drawer {
+    width: min(320px, 86vw);
+
+    .sidebar-account-container {
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .chatgpt-account-popover {
+      width: calc(100% - 24px);
+      left: 12px;
+      bottom: 74px;
+      border-radius: 16px;
+    }
+  }
+
+  // Fenêtre des Paramètres Style ChatGPT Adaptée Mobile
+  .settings-backdrop {
+    padding: 8px;
+
+    .settings-window-card {
+      width: 100%;
+      height: 94dvh;
+      max-height: 94dvh;
+      border-radius: 20px;
+    }
+
+    .settings-window-layout {
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .settings-nav-sidebar {
+      width: 100%;
+      padding-top: 48px;
+      border-right: none;
+      border-bottom: 1px solid #E4E4E7;
+      flex-shrink: 0;
+
+      .settings-search-box {
+        margin: 0 10px 8px;
+      }
+
+      .settings-tabs-list {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0 10px 8px;
+        gap: 6px;
+        -webkit-overflow-scrolling: touch;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .settings-tab-btn {
+          flex-shrink: 0;
+          width: auto;
+          padding: 6px 12px;
+          border-radius: 16px;
+          background: #FFFFFF;
+          border: 1px solid #E4E4E7;
+          font-size: 12px;
+          gap: 6px;
+
+          &.active {
+            background: #FFF5EC;
+            border-color: #FF8A00;
+          }
+        }
+      }
+    }
+
+    .settings-content-panel {
+      padding: 16px 14px 24px;
+      flex: 1;
+      overflow-y: auto;
+
+      .pane-header {
+        margin-bottom: 16px;
+        h3 {
+          font-size: 16px;
+        }
+        p {
+          font-size: 12px;
+        }
+      }
+
+      .settings-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 0;
+
+        .btn-settings-action, .settings-select {
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      .account-profile-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+
+        .profile-details {
+          width: 100%;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // Modal d'Authentification & Cloud Sync
+  .auth-backdrop {
+    padding: 10px;
+
+    .auth-window-card {
+      padding: 24px 18px 20px;
+      border-radius: 22px;
+      max-width: 100%;
+
+      .auth-window-header {
+        margin-bottom: 16px;
+        .auth-brand-badge {
+          width: 44px;
+          height: 44px;
+          font-size: 18px;
+        }
+        .auth-title {
+          font-size: 18px;
+        }
+        .auth-subtitle {
+          font-size: 12px;
+        }
+      }
+
+      .auth-forms-container .auth-form-pane {
+        gap: 12px;
+
+        .auth-field-group .auth-input-wrapper input {
+          font-size: 16px !important; // Pas de zoom forcé
+          padding: 10px 38px 10px 36px;
+        }
+
+        .btn-auth-submit {
+          padding: 11px 16px;
+          font-size: 13.5px;
+        }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   TABLET ADAPTATIONS (768px - 1024px)
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .app-header {
+    padding: 12px 24px;
+  }
+
+  .content-container {
+    max-width: 720px;
+  }
+
+  .hero-view {
+    padding-top: 40px;
+
+    .hero-title {
+      font-size: 27px;
+      max-width: 480px;
+    }
+
+    .suggestions-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .nora-orb {
+    width: 130px;
+    height: 130px;
+  }
+
+  .settings-backdrop .settings-window-card {
+    width: 740px;
+    height: 560px;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP ADAPTATIONS (>= 1025px) — EXPÉRIENCE LUXE & FLUIDE
+   ========================================================================== */
+@media (min-width: 1025px) {
+  .app-header {
+    padding: 14px 32px;
+  }
+
+  .content-container {
+    max-width: 800px;
+  }
+
+  .hero-view {
+    padding-top: 50px;
+
+    .hero-title {
+      font-size: 30px;
+      max-width: 520px;
+    }
+
+    .suggestions-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .nora-orb {
+    width: 140px;
+    height: 140px;
+  }
+
+  .settings-backdrop .settings-window-card {
+    width: 860px;
+    height: 600px;
+  }
+}
+
