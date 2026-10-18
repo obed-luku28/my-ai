@@ -9,6 +9,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- PWA Web App Manifest -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Apple iOS & iPhone Safari Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NORA" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png" />
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/apple-touch-icon-167x167.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/src/logo/nora-logo.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+  <link rel="shortcut icon" href="/favicon.svg" />
   <link rel="stylesheet" href="/src/styles/main.scss" />
 </head>
 <body>
@@ -24,8 +44,9 @@
       </div>
 
       <div class="header-center" id="headerCenter">
-        <!-- The miniature glowing orb moves here when in conversation -->
+        <!-- The miniature glowing orb / SVG logo moves here when in conversation -->
         <div class="brand-title" id="headerBrandTitle">
+          <img src="/src/logo/nora-logo.svg" alt="NORA Logo" class="brand-app-logo" />
           <span class="brand-name">NORA</span>
         </div>
       </div>
@@ -169,7 +190,7 @@
     <aside class="sidebar-drawer" id="sidebarDrawer" aria-label="Menu latéral">
       <div class="sidebar-header">
         <div class="sidebar-brand">
-          <span class="mini-orb"></span>
+          <img src="/src/logo/nora-logo.svg" alt="NORA Logo" class="sidebar-app-logo" />
           <span class="title">NORA</span>
         </div>
         <!-- Actions d'en-tête : Recherche et Retrait de fenêtre (fermeture) -->
@@ -195,7 +216,7 @@
         </button>
       </div>
 
-      <!-- Actions Barre Latérale : Nouvelle Discussion & Plugins -->
+      <!-- Actions Barre Latérale : Nouvelle Discussion & Plugins & Installation Web App -->
       <div class="sidebar-action-wrap">
         <button id="btnSidebarNewChat" class="btn-new-chat">
           <i class="fa-regular fa-pen-to-square"></i>
@@ -207,6 +228,13 @@
             <span>Plugins & Applications</span>
           </div>
           <span class="plugins-badge" id="pluginsBadgeCount">0</span>
+        </button>
+        <button id="btnInstallPwa" class="btn-sidebar-install" title="Installer l'application sur iPhone, Android ou PC">
+          <div class="btn-install-left">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>Installer l'application</span>
+          </div>
+          <span class="install-pwa-badge"><i class="fa-brands fa-apple"></i> iOS / PWA</span>
         </button>
       </div>
 
@@ -962,6 +990,62 @@
           </div>
         </div>
 
+    <!-- Modal Guide d'installation iPhone / iOS & PWA -->
+    <div class="modal-backdrop ios-install-backdrop" id="iosInstallModal">
+      <div class="ios-install-card">
+        <button class="btn-close-ios-install" id="btnCloseIosInstall" aria-label="Fermer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        
+        <div class="ios-install-header">
+          <div class="app-icon-preview">
+            <img src="/src/logo/nora-logo.svg" alt="NORA Logo" class="preview-logo-img" />
+          </div>
+          <div class="app-info-text">
+            <h3>Installer NORA sur iPhone</h3>
+            <p>Profitez d'une expérience plein écran ultra-rapide comme une application native iOS.</p>
+          </div>
+        </div>
+
+        <div class="ios-install-steps">
+          <div class="ios-step-row">
+            <div class="step-badge">1</div>
+            <div class="step-text-wrap">
+              <div class="step-title">Touchez le bouton Partager</div>
+              <div class="step-detail">En bas de votre écran dans Safari, appuyez sur l'icône :</div>
+              <div class="step-visual-pill">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                <span>Partager (Share)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ios-step-row">
+            <div class="step-badge">2</div>
+            <div class="step-text-wrap">
+              <div class="step-title">Sélectionnez « Sur l'écran d'accueil »</div>
+              <div class="step-detail">Faites défiler le menu d'actions Safari et touchez :</div>
+              <div class="step-visual-pill">
+                <i class="fa-regular fa-square-plus"></i>
+                <span>Sur l'écran d'accueil</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ios-step-row">
+            <div class="step-badge">3</div>
+            <div class="step-text-wrap">
+              <div class="step-title">Validez en touchant « Ajouter »</div>
+              <div class="step-detail">Appuyez sur <strong>Ajouter</strong> en haut à droite. L'icône NORA apparaîtra instantanément sur votre écran d'accueil !</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ios-install-footer">
+          <button type="button" class="btn-ios-done" id="btnIosInstallDone">
+            J'ai compris
+          </button>
+        </div>
       </div>
     </div>
 

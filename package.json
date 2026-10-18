@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite --host --port 5173",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "icons": "node scripts/generate-icons.js"
   },
   "devDependencies": {
     "sass": "^1.83.0",
+    "sharp": "^0.35.5",
     "vite": "^6.0.7"
   },
   "dependencies": {

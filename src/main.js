@@ -1,6 +1,7 @@
 import { geminiService } from './services/geminiService.js';
 import { pluginService, AVAILABLE_PLUGINS } from './services/pluginService.js';
 import { authService } from './services/authService.js';
+import { pwaService } from './services/pwaService.js';
 import { PHOTOGRAPHERS_DATA } from './data/mockData.js';
 
 const STORAGE_KEY_CONVERSATIONS = 'nora_recent_conversations';
@@ -206,6 +207,12 @@ class NoraConversationalApp {
     this.btnHeaderAuth = document.getElementById('btnHeaderAuth');
     this.headerAuthLabel = document.getElementById('headerAuthLabel');
     this.heroTitle = document.getElementById('heroTitle');
+
+    // PWA & iOS Elements
+    this.btnInstallPwa = document.getElementById('btnInstallPwa');
+    this.iosInstallModal = document.getElementById('iosInstallModal');
+    this.btnCloseIosInstall = document.getElementById('btnCloseIosInstall');
+    this.btnIosInstallDone = document.getElementById('btnIosInstallDone');
   }
 
   bindEvents() {
@@ -216,6 +223,40 @@ class NoraConversationalApp {
     this.btnSidebarNewChat.addEventListener('click', () => {
       this.closeSidebar();
       this.resetConversation();
+    });
+
+    // PWA & iPhone Installation listener
+    if (this.btnInstallPwa) {
+      this.btnInstallPwa.addEventListener('click', () => {
+        this.closeSidebar();
+        pwaService.promptInstall(() => this.openIosInstallModal());
+      });
+    }
+
+    if (this.btnCloseIosInstall) {
+      this.btnCloseIosInstall.addEventListener('click', () => this.closeIosInstallModal());
+    }
+    if (this.btnIosInstallDone) {
+      this.btnIosInstallDone.addEventListener('click', () => this.closeIosInstallModal());
+    }
+    if (this.iosInstallModal) {
+      this.iosInstallModal.addEventListener('click', (e) => {
+        if (e.target === this.iosInstallModal) {
+          this.closeIosInstallModal();
+        }
+      });
+    }
+
+    pwaService.onInstallStateChange((state) => {
+      if (this.btnInstallPwa && state.isStandalone) {
+        this.btnInstallPwa.innerHTML = `
+          <div class="btn-install-left">
+            <i class="fa-solid fa-circle-check" style="color: #10B981;"></i>
+            <span>Application installée</span>
+          </div>
+          <span class="install-pwa-badge" style="background: #10B981;">Actif</span>
+        `;
+      }
     });
 
     // Plugins button in sidebar drawer
@@ -789,6 +830,18 @@ class NoraConversationalApp {
 
   closeSettingsModal() {
     this.noraSettingsModal.classList.remove('active');
+  }
+
+  openIosInstallModal() {
+    if (this.iosInstallModal) {
+      this.iosInstallModal.classList.add('active');
+    }
+  }
+
+  closeIosInstallModal() {
+    if (this.iosInstallModal) {
+      this.iosInstallModal.classList.remove('active');
+    }
   }
 
   switchSettingsTab(tabName) {

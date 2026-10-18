@@ -344,9 +344,17 @@
       align-items: center;
       gap: 10px;
 
+      .sidebar-app-logo {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+        flex-shrink: 0;
+      }
+
       .title {
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 800;
         letter-spacing: -0.01em;
         color: $color-text-primary;
       }
@@ -519,6 +527,62 @@
 
         .btn-plugins-left i {
           color: #FF8A00;
+        }
+      }
+    }
+
+    .btn-sidebar-install {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      border-radius: 14px;
+      background: #FAFAFA;
+      color: #18181B;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px dashed rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      .btn-install-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        i {
+          font-size: 13.5px;
+          color: #FF8A00;
+        }
+      }
+
+      .install-pwa-badge {
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 8px;
+        background: #18181B;
+        color: #FFFFFF;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      &:hover {
+        background: #18181B;
+        color: #FFFFFF;
+        border-color: #18181B;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
+
+        .btn-install-left i {
+          color: #FFA843;
+        }
+
+        .install-pwa-badge {
+          background: #FFFFFF;
+          color: #18181B;
         }
       }
     }
@@ -3021,5 +3085,204 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+  }
+}
+
+/* ==========================================================================
+   MODAL INSTALLATION PWA / IPHONE (IOS SAFARI)
+   ========================================================================== */
+
+.ios-install-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ios-install-card {
+    background: #FFFFFF;
+    border-radius: 28px;
+    width: 100%;
+    max-width: 440px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22), 0 0 1px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transform: scale(0.95) translateY(12px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(228, 228, 231, 0.8);
+
+    .btn-close-ios-install {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: #F4F4F6;
+      color: #71717A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background: #E4E4E7;
+        color: #18181B;
+      }
+    }
+
+    .ios-install-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+
+      .app-icon-preview {
+        width: 58px;
+        height: 58px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .preview-logo-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .app-info-text {
+        h3 {
+          font-size: 18px;
+          font-weight: 800;
+          color: #18181B;
+          margin: 0 0 4px 0;
+          letter-spacing: -0.01em;
+        }
+
+        p {
+          font-size: 12.5px;
+          color: #71717A;
+          margin: 0;
+          line-height: 1.45;
+        }
+      }
+    }
+
+    .ios-install-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+
+      .ios-step-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: #FAFAFA;
+        border: 1px solid #F0F0F2;
+
+        .step-badge {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: #18181B;
+          color: #FFFFFF;
+          font-size: 12px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+
+        .step-text-wrap {
+          flex: 1;
+
+          .step-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #18181B;
+            margin-bottom: 2px;
+          }
+
+          .step-detail {
+            font-size: 12px;
+            color: #71717A;
+            line-height: 1.4;
+            margin-bottom: 6px;
+          }
+
+          .step-visual-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: #FFFFFF;
+            border: 1px solid #E4E4E7;
+            font-size: 12px;
+            font-weight: 600;
+            color: #007AFF; // Couleur iconique iOS
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+            i {
+              font-size: 13px;
+            }
+          }
+        }
+      }
+    }
+
+    .ios-install-footer {
+      .btn-ios-done {
+        width: 100%;
+        padding: 12px 18px;
+        border-radius: 14px;
+        border: none;
+        background: #18181B;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #27272A;
+          transform: translateY(-1px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  &.active .ios-install-card {
+    transform: scale(1) translateY(0);
   }
 }
